@@ -12,7 +12,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   # S3 bucket for Terraform state
-  ECR_REPOSITORY: client-srv
+  ECR_REPOSITORY: client-srv  
   AWS_REGION: us-east-2
   EKS_CLUSTER: todo-eks
 
@@ -35,3 +35,50 @@ jobs:
           daemon_off: false
           dockerfile: ./Dockerfile
           context: ./
+  DEPLOY_TO_EKS:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Get Kube config file
+        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION}} --name ${{ env.EKS_CLUSTER }}
+
+      - name: Print config file
+        run: cat ~/.kube/config
+
+      - name: Login to ECR
+      # - name: Login to Amazon ECR
+        # id: login-ecr
+        # uses: aws-actions/amazon-ecr-login@v2
+        # with:
+        #   mask-password: 'false'
+        # run: kubectl create secret docker-registry regcred \
+        #   --docker-server=715514482422.dkr.ecr.us-east-2.amazonaws.com \
+        #   --docker-username=AWS \
+        #   --docker-password=$(aws ecr get-login-password --region us-east-2) \
+        #   --docker-email=nguyenanhhoanvu@gmail.com
+        run: kubectl create secret docker-registry regcred --docker-server=${{ secrets.REGISTRY}} --docker-username=AWS docker-password=$(aws ecr get-login-password)
+
+      - name: Deploy Helm
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          cluster-name: ${{ env.EKS_CLUSTER }}
+          chart-path: helm/todocharts
+          namespace: default
+          values: |
+            clientimage=${{ secrets.REGISTRY }}/${{ env.ECR_REPOSITORY_CLIENT }}, 
+            apptag=latest,
+            RDS_POSTGRES_DB_USERNAME=${{ secrets.RDS_POSTGRES_DB_USERNAME }},
+            RDS_POSTGRES_DB_PASSWORD=${{ secrets.RDS_POSTGRES_DB_PASSWORD }}
+          name: todo-stack

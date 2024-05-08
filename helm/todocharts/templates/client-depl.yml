@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-srv
+  labels:
+    app: client-srv    
+spec:
+  selector:
+    matchLabels:
+      app: client-srv
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: client-srv
+    spec:
+      containers:
+      - name: client-srv
+        image: 715514482422.dkr.ecr.us-east-2.amazonaws.com/client-srv:latest
+        ports:
+        - name: client-srv-port
+          containerPort: 80
+        env:
+        - name: REACT_APP_AUTH_SERVICE_DOMAIN
+          value: http://localhost:8000/auth/
+        - name: REACT_APP_TODO_SERVICE_DOMAIN
+          value: http://localhost:8001/todos/
+
+
+        

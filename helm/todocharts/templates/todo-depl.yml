@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-srv
+  labels:
+    app: todo-srv    
+spec:
+  selector:
+    matchLabels:
+      app: todo-srv
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: todo-srv
+    spec:
+      containers:
+      - name: todo-srv
+        image: 715514482422.dkr.ecr.us-east-2.amazonaws.com/todo-srv:latest
+        ports:
+        - name: todo-srv-port
+          containerPort: 8001
+        env:
+        - name: RDS_POSTGRES_DB_URL
+          value: {{ .Values.RDS_POSTGRES_DB_URL }}
+        - name: RDS_POSTGRES_DB_USERNAME
+          value: {{ .Values.RDS_POSTGRES_DB_USERNAME }}
+        - name: RDS_POSTGRES_DB_PASSWORD
+          value: {{ .Values.RDS_POSTGRES_DB_PASSWORD }}
+
+        

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-srv
+  labels:
+    app: auth-srv    
+spec:
+  selector:
+    matchLabels:
+      app: auth-srv
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: auth-srv
+    spec:
+      containers:
+      - name: auth-srv
+        image: 715514482422.dkr.ecr.us-east-2.amazonaws.com/auth-srv:latest
+        ports:
+        - name: auth-srv-port
+          containerPort: 8000
+        env:
+        - name: AWS_IAM_DYNAMO_DB_ACCESS_KEY
+          value: {{ .Values.AWS_IAM_DYNAMO_DB_ACCESS_KEY }}
+        - name: AWS_IAM_DYNAMO_DB_SECRET_KEY
+          value: {{ .Values.AWS_IAM_DYNAMO_DB_SECRET_KEY }}
+        - name: JWT_SECRET
+          value: {{ .Values.JWT_SECRET }}
+        - name: AWS_DYNAMO_DB_REGION
+          value: {{ .Values.AWS_DYNAMO_DB_REGION }}
+      # nodeSelector:
+      #   zone: us-east-2a
+
+        

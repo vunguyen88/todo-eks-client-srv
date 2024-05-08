@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+name: todo-ingress-service
+annotations:
+  nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: https://846CB92B94F1418542EFF159E5ECF17E.gr7.us-east-2.eks.amazonaws.com
+      http:
+        paths:
+          - path: /auth/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-srv
+                port: 8000
+          - path: /todos/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: todo-srv
+                port: 8001
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: client-srv
+                port:
+                  number: 80
+
