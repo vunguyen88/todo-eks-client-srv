@@ -19,6 +19,7 @@ RUN npm run build
 # Stage 2: Serve the built assets using Nginx
 FROM nginx:alpine
 
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 # Copy the built assets from the previous stage
 COPY --from=build /app/build /usr/share/nginx/html
 
@@ -26,7 +27,7 @@ COPY --from=build /app/build /usr/share/nginx/html
 # COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose port 80 (the default port for HTTP traffic)
-EXPOSE 80
+EXPOSE 3000
 
 # Start Nginx when the container starts
 CMD ["nginx", "-g", "daemon off;"]
