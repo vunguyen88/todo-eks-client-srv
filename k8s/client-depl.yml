@@ -20,7 +20,7 @@ spec:
         image: vunguyen88/todoeks-client
         env:
         - name: REACT_APP_AUTH_SERVICE_DOMAIN
-          value: http://a9297921eaf034cd5b99bd8e521aef58-58a551203b6d1cf0.elb.us-east-2.amazonaws.com/auth/
+          value: http://abac31723c1244dee83616626f021eda-d992b1b3f3b76a72.elb.us-east-2.amazonaws.com/auth/
         ports:
           - name: client
             containerPort: 3000
