@@ -79,10 +79,10 @@ jobs:
       #   run: aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 715514482422.dkr.ecr.us-east-2.amazonaws.com
 
       - name: Apply YAML depl file to EKS cluster
-        run: kubectl apply -f k8s/client-depl.yaml
+        run: kubectl apply -f k8s/client-depl.yml
 
       - name: Apply YAML service file to EKS cluster
-        run: kubectl apply -f k8s/client-clusterip-svc.yaml
+        run: kubectl apply -f k8s/client-clusterip-svc.yml
       
       - name: Apply YAML service NodePort for testing purpose to EKS cluster
-        run: kubectl apply -f k8s/client-svc.yaml
+        run: kubectl apply -f k8s/client-svc.yml
