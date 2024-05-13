@@ -17,8 +17,8 @@ export default function Landing({isAuthenticated, setIsAuthenticated}) {
     return <div className="alert alert-danger" role="alert">
       {errorMessage}
     </div>
-  }
-
+      }
+  console.log('TEST ENV ', process.env.REACT_APP_AUTH_SERVICE_DOMAIN)
   useEffect(() => {
     async function fetchTodos() {
       try {
