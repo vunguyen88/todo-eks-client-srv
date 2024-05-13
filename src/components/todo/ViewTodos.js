@@ -198,7 +198,8 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
           todos.map((todo) => {
             return <tr className={todo.isCompleted? 'completed' : ''} key={todo.id}>
               <td>{todo.title}</td>
-              <td>{moment(todo.targetDate).format('ll')}</td>
+              {/* <td>{moment(todo.targetDate).format('ll')}</td> */}
+							<td>{todo.target_date}</td>
               {/* <td>{todo.isCompleted.toString()}</td> */}
 							{
 								todo.completed 

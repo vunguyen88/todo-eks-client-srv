@@ -16,7 +16,6 @@ function AddTodo({isAuthenticated, setIsAuthenticated}) {
 			history.push("/");
 		}
 	}, [isAuthenticated, history])
-
 	const onSubmit = async (e) => {
     e.preventDefault();
 
