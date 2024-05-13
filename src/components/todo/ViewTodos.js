@@ -127,7 +127,8 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 
 	const markCompleted = async (id) => {
 		try {
-      await axios.patch(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}${id}`, {}, {
+      // await axios.patch(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}${id}`, {}, {
+			await axios.patch(`/todos`, {}, {
 				headers: {
 					// 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
 					'Authorization': `Bearer ${authContext.auth.accessToken}`,
@@ -147,7 +148,8 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 
 	const deleteTodo = async (id) => {
 		try {
-      await axios.delete(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}${id}`, {
+      // await axios.delete(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}${id}`, {
+			await axios.delete(`/todos/${id}`, {
 				headers: {
 					// 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
 					'Authorization': `Bearer ${authContext.auth.accessToken}`,

@@ -24,13 +24,3 @@ spec:
         ports:
           - name: client
             containerPort: 3000
-        # env:
-        #   - name: REACT_APP_AUTH_SERVICE_DOMAIN
-        #     value: http://todoeks.local/auth/
-        #   - name: REACT_APP_TODO_SERVICE_DOMAIN
-        #     value: http://todoeks.local/todos/
-        #   - name: REACT_APP_TEST_ENV
-        #     value: testvalueK8s
-
-
-        

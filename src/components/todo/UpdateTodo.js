@@ -24,7 +24,8 @@ function UpdateTodo({isAuthenticated, setIsAuthenticated, match}) {
     e.preventDefault();
   
     try {
-      await axios.put(`http://localhost:3001/api/todo/${match.params.id}`, {title, targetDate}, {
+      // await axios.put(`http://localhost:3001/api/todo/${match.params.id}`, {title, targetDate}, {
+      await axios.put(`/todos/${match.params.id}`, {title, targetDate}, {
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('token')}`
         }
