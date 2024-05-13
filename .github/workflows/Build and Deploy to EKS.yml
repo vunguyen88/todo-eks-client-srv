@@ -24,7 +24,10 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Check current repo
-        run: ls 
+        run: ls k8s/
+
+      - name: Print file
+        run: cat k8s/client-depl.yml
 
   #     - name: Generate .env file
   #       run: |
