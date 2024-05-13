@@ -79,14 +79,23 @@ jobs:
       - name: Get Kube config file
         run: aws eks update-kubeconfig --region ${{ env.AWS_REGION}} --name ${{ env.EKS_CLUSTER }}
 
+      - name: Inject environment variables into YAML files
+        run: |
+          export REACT_APP_AUTH_SERVICE_DOMAIN=${{ env.REACT_APP_AUTH_SERVICE_DOMAIN }}
+          export REACT_APP_TODO_SERVICE_DOMAIN=${{ env.REACT_APP_TODO_SERVICE_DOMAIN }}
+          envsubst < k8s/client-depl.yml | sed 's/"/\\"/g' > k8s/client-depl-modified.yml
+
+      - name: Check updated yml file
+        run: cat k8s/client-depl-modified.yml
+
       # - name: Login to ECR
       #   run: aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 715514482422.dkr.ecr.us-east-2.amazonaws.com
 
       - name: Apply YAML depl file to EKS cluster
-        run: kubectl apply -f k8s/client-depl.yml
+        run: kubectl apply -f k8s/client-depl-modified.yml
 
       - name: Apply YAML service file to EKS cluster
         run: kubectl apply -f k8s/client-clusterip-svc.yml
       
       - name: Apply YAML service NodePort for testing purpose to EKS cluster
-        run: kubectl apply -f k8s/client-svc.yml --env REACT_APP_AUTH_SERVICE_DOMAIN=${{ env.REACT_APP_AUTH_SERVICE_DOMAIN }} --env REACT_APP_TODO_SERVICE_DOMAIN=${{ env.REACT_APP_TODO_SERVICE_DOMAIN }}
+        run: kubectl apply -f k8s/client-svc.yml
