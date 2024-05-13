@@ -129,7 +129,7 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 	const markCompleted = async (id) => {
 		try {
       // await axios.patch(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}${id}`, {}, {
-			await axios.patch(`/todos`, {}, {
+			await axios.patch(`/todos/${id}`, {}, {
 				headers: {
 					// 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
 					'Authorization': `Bearer ${authContext.auth.accessToken}`,
