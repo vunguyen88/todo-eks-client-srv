@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { useHistory } from "react-router-dom"; 
 import AuthContext from '../../context/authContext';
 
-function Todos({isAuthenticated, setIsAuthenticated}) {
+function Todos({isAuthenticated}) {
 	const [todos, setTodos] = useState([]);
 	const [changed, setChanged] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
@@ -28,7 +26,8 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 			// let response = null;
 			try {
         // if (!authContext.auth.isSignedIn) return setNoAuthMessage('Please login to view and add todo')
-        const response = await axios.get(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}`, {
+        // const response = await axios.get(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}`, {
+				const response = await axios.get(`/todos`, {
           headers: {
             // 'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
             'Authorization': `Bearer ${authContext.auth.accessToken}`,
@@ -127,7 +126,8 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 
 	const markCompleted = async (id) => {
 		try {
-      await axios.patch(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}${id}`, {}, {
+      // await axios.patch(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}${id}`, {}, {
+			await axios.patch(`/todos/${id}`, {}, {
 				headers: {
 					// 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
 					'Authorization': `Bearer ${authContext.auth.accessToken}`,
@@ -147,7 +147,8 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 
 	const deleteTodo = async (id) => {
 		try {
-      await axios.delete(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}${id}`, {
+      // await axios.delete(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}${id}`, {
+			await axios.delete(`/todos/${id}`, {
 				headers: {
 					// 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
 					'Authorization': `Bearer ${authContext.auth.accessToken}`,

@@ -18,12 +18,12 @@ export default function Landing({isAuthenticated, setIsAuthenticated}) {
       {errorMessage}
     </div>
       }
-  console.log('TEST ENV ', process.env.REACT_APP_AUTH_SERVICE_DOMAIN)
   useEffect(() => {
     async function fetchTodos() {
       try {
         if (!authContext.auth && authContext.auth.isSignedIn) return setNoAuthMessage('Please login to view and add todo')
-        const response = await axios.get(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}`, {
+        // const response = await axios.get(`${process.env.REACT_APP_TODO_SERVICE_DOMAIN}`, {
+        const response = await axios.get(`/todos`, {
           headers: {
             // 'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
             'Authorization': `Bearer ${authContext.auth.accessToken}`,

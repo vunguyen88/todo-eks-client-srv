@@ -20,7 +20,8 @@ function AddTodo({isAuthenticated, setIsAuthenticated}) {
     e.preventDefault();
 
     try {
-      await axios.post(process.env.REACT_APP_TODO_SERVICE_DOMAIN, {title, targetDate}, {
+      // await axios.post(process.env.REACT_APP_TODO_SERVICE_DOMAIN, {title, targetDate}, {
+      await axios.post('/todos', {title, targetDate}, {
         headers: {
           'Authorization': `Bearer ${authContext.auth.accessToken}`,
         }
