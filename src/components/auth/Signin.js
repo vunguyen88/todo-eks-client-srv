@@ -19,7 +19,6 @@ function Signin({isAuthenticated, setIsAuthenticated}) {
 	const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('REACT_APP_AUTH_SERVICE_DOMAIN ', process.env.REACT_APP_AUTH_SERVICE_DOMAIN)
       // const response = await axios.post(`${process.env.REACT_APP_AUTH_SERVICE_DOMAIN}login`, {email, password});
       const response = await axios.post(`/auth/login`, {email, password});
       setIsAuthenticated(true);

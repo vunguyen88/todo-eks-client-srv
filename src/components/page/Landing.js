@@ -18,7 +18,6 @@ export default function Landing({isAuthenticated, setIsAuthenticated}) {
       {errorMessage}
     </div>
       }
-  console.log('REACT_APP_AUTH_SERVICE_DOMAIN ', process.env.REACT_APP_AUTH_SERVICE_DOMAIN)
   useEffect(() => {
     async function fetchTodos() {
       try {

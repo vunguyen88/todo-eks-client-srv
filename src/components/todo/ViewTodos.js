@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { useHistory } from "react-router-dom"; 
 import AuthContext from '../../context/authContext';
 
-function Todos({isAuthenticated, setIsAuthenticated}) {
+function Todos({isAuthenticated}) {
 	const [todos, setTodos] = useState([]);
 	const [changed, setChanged] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
