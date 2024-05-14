@@ -1,4 +1,5 @@
-on:
+name: Manual Build and Deploy to EKS
+'on':
   # Manual trigger workflow
   workflow_dispatch:
       # Inputs the workflow accepts.

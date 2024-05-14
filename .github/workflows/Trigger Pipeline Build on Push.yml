@@ -1,0 +1,78 @@
+name: Trigger Pipeline on New Feature Push
+'on':
+  push:
+    branches:
+    # whenever the code push to feature or debug or update branch, github action will automatically build and deploy code
+      - 'feature/**'
+      - 'update/**'
+      - 'debug/**'
+
+env:
+  # Credentials for deployment to AWS
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # S3 bucket for Terraform state
+  ECR_REPOSITORY: client-srv
+  AWS_REGION: us-east-2
+  EKS_CLUSTER: todo-eks
+
+jobs:
+  BUILD_AND_PUBLISH:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build Docker image
+        run: docker build -t vunguyen88/todoeks-client:latest .
+          
+      - name: Push built image to Docker Hub
+        run: docker push vunguyen88/todoeks-client:latest
+
+      # - name: Build & Upload image to ECR
+      #   uses: appleboy/docker-ecr-action@master
+      #   with:
+      #     access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     registry: ${{ secrets.REGISTRY }}
+      #     repo: ${{ env.ECR_REPOSITORY }}
+      #     region: ${{ env.AWS_REGION }}
+      #     tags: "latest,${{ github.run_number }}"
+      #     daemon_off: false
+      #     dockerfile: ./Dockerfile
+      #     context: ./
+
+  DEPLOY_TO_EKS:
+    needs: BUILD_AND_PUBLISH
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      
+      - name: Update Kubernetes config file
+        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION}} --name ${{ env.EKS_CLUSTER }}
+
+      # - name: Login to ECR
+      #   run: aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 715514482422.dkr.ecr.us-east-2.amazonaws.com
+
+      - name: Rollout update code build to EKS cluster
+        run: kubectl rollout restart deployment client-depl
