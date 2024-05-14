@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import AuthContext from '../../context/authContext';
 
 function Signup({isAuthenticated, setIsAuthenticated}) {
-	const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -20,7 +20,7 @@ function Signup({isAuthenticated, setIsAuthenticated}) {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/auth/register', {username, password});
+      const response = await axios.post('/auth/register', {email, password});
       setIsAuthenticated(true);
       authContext.dispatch({type: 'SIGN_IN_SUCCESS', auth: response.data});
     } catch(error){
@@ -34,7 +34,7 @@ function Signup({isAuthenticated, setIsAuthenticated}) {
       return;
     }
     
-    setUsername('');
+    setEmail('');
     setPassword('');
     setErrorMessage('');
     setMessage('Sign up successful');
@@ -44,7 +44,7 @@ function Signup({isAuthenticated, setIsAuthenticated}) {
 
   useEffect(() => {
     setMessage('')
-  }, [username, password])
+  }, [email, password])
 
   const showMessage = () => {
     if(message === ''){
@@ -70,11 +70,11 @@ function Signup({isAuthenticated, setIsAuthenticated}) {
       <form onSubmit={onSubmit}>
         <h1>Sign Up</h1>
         <div className="form-group">
-          <label>Username</label>
+          <label>Email</label>
           <input 
-            value={username} 
-            onChange={e => setUsername(e.target.value)} 
-            placeholder="Username"
+            value={email} 
+            onChange={e => setEmail(e.target.value)} 
+            placeholder="Email"
             className="form-control">
           </input>
         </div>
