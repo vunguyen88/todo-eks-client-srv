@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useHistory } from "react-router-dom"; 
+import AuthContext from '../../context/authContext';
 
 function Signup({isAuthenticated, setIsAuthenticated}) {
 	const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const authContext = useContext(AuthContext);
+
   let history = useHistory();
 
   function timeout(delay) {
@@ -17,10 +20,9 @@ function Signup({isAuthenticated, setIsAuthenticated}) {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/signup', {username, password});
-      sessionStorage.setItem('token', response.data.token);
-      sessionStorage.setItem('name', response.data.username);
+      const response = await axios.post('/auth/register', {username, password});
       setIsAuthenticated(true);
+      authContext.dispatch({type: 'SIGN_IN_SUCCESS', auth: response.data});
     } catch(error){
       setMessage('');
       if (error.response) {
