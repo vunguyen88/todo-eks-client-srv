@@ -1,4 +1,5 @@
 # todo-eks-client-srv (React Web Server deploy on EKS)
+(Deprecated due to switching to Vite for production ready, code build in Vite in both dev and prod env are much faster)
 
 This repository contains a simple React application configured to run inside a Docker container on port 3000.
 
